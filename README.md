@@ -2,5 +2,10 @@
 Simulação de um banco
 
 ---
-## Como rodar o projeto
-Para rodar o projeto é preciso gerar o arquivo com a extensão **.jar**: `./mvnw clean package`
+## Como empacotar e rodar o projeto
+
+```
+./mvnw clean package
+
+java -jar target/alura-bank-0.0.1-SNAPSHOT.jar
+```
