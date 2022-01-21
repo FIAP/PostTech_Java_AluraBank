@@ -1,5 +1,9 @@
 # pos-java-alura-bank
-Simulação de um banco
+Simulação de um banco com as seguintes operações:
+
+- DEPOSITO
+- SAQUE
+- TRANSFERENCIA
 
 ---
 ## Como empacotar e rodar o projeto
