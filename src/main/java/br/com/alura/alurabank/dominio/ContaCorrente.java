@@ -1,5 +1,6 @@
 package br.com.alura.alurabank.dominio;
 
+import br.com.alura.alurabank.controller.exceptions.SaldoInsuficienteException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -44,6 +45,15 @@ public class ContaCorrente {
     }
 
     public void movimentar(MovimentacaoDeConta movimentacao) {
+
+
+        if (movimentacao.getOperacao().equals(Operacao.SAQUE)) {
+            BigDecimal saldo = getSaldo();
+            if (saldo.compareTo(movimentacao.getValor()) < 0) {
+                throw new SaldoInsuficienteException("Saldo insuficiente");
+            }
+        }
+
         movimentacoes.add(movimentacao);
     }
 

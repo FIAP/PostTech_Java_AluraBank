@@ -28,6 +28,10 @@ public class MovimentacaoDeConta {
         return conta.obterNumeroConta();
     }
 
+    public Operacao getOperacao() {
+        return operacao;
+    }
+
     public BigDecimal getValor() {
         if (operacao.equals(Operacao.SAQUE)) {
             return valor.negate();
