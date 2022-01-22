@@ -4,134 +4,76 @@ import br.com.alura.alurabank.controller.form.ContaCorrenteForm;
 import br.com.alura.alurabank.controller.form.CorrentistaForm;
 import br.com.alura.alurabank.controller.form.MovimentacaoForm;
 import br.com.alura.alurabank.controller.form.TransferenciaForm;
-import br.com.alura.alurabank.dominio.ContaCorrente;
-import br.com.alura.alurabank.dominio.Correntista;
-import br.com.alura.alurabank.dominio.DadosDaConta;
-import br.com.alura.alurabank.repositorio.RepositorioContasCorrente;
+import br.com.alura.alurabank.controller.view.DadosDaContaView;
+import br.com.alura.alurabank.controller.view.ExtratoView;
 import br.com.alura.alurabank.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import java.util.*;
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/contas")
 public class ContaController {
 
     @Autowired
-    private RepositorioContasCorrente repositorioContasCorrente;
-
-    @Autowired
     private ContaService service;
 
-    @Autowired
-    private Validator validator;
-
-    @GetMapping
-    public String consultarSaldo(@RequestParam(name = "banco") String banco,
-                                 @RequestParam(name = "agencia") String agencia,
-                                 @RequestParam(name = "numero") String numero){
-        ContaCorrente contaEncontrada = repositorioContasCorrente.buscar(banco, agencia, numero).orElse(new ContaCorrente());
-
-        return String.format("Banco: %s, Agência: %s, Conta: %s. Saldo: %s", banco, agencia, numero, contaEncontrada.getSaldo());
-    }
 
     @PostMapping
-    public ResponseEntity criarNovaConta(@RequestBody CorrentistaForm correntistaForm){
-        Set<ConstraintViolation<CorrentistaForm>> violacoes = validator.validate(correntistaForm);
-        Map<Object, Object> collect = validar(correntistaForm);
-        if(!collect.isEmpty()) return ResponseEntity.badRequest().body(collect);
-        
-        Correntista correntista = correntistaForm.toCorrentista();
-        String banco = "333";
-        String agencia = "44444";
-        String numero = Integer.toString(new Random().nextInt(Integer.MAX_VALUE));
-        ContaCorrente conta = new ContaCorrente(banco, agencia, numero, correntista);
+    public ResponseEntity<?> criarNovaConta(@RequestBody CorrentistaForm correntistaForm){
 
-        repositorioContasCorrente.salvar(conta);
+        DadosDaContaView dadosDaConta = service.criarConta(correntistaForm);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(conta);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dadosDaConta);
     }
 
     @DeleteMapping
-    public ResponseEntity fecharConta(@RequestBody ContaCorrenteForm contaForm){
-        Map<Object, Object> collect = validar(contaForm);
-        if(!collect.isEmpty()) return ResponseEntity.badRequest().body(collect);
+    public ResponseEntity<?> fecharConta(@RequestBody ContaCorrenteForm contaForm){
+        try {
+            service.fecharConta(contaForm.toDadosDaConta());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
-        Optional<ContaCorrente> opConta = repositorioContasCorrente
-                .buscar(contaForm.getBanco(), contaForm.getAgencia(), contaForm.getNumero());
-
-        if(opConta.isEmpty()) return ResponseEntity.notFound().build();
-
-        ContaCorrente conta = opConta.get();
-        repositorioContasCorrente.remover(conta);
-        return ResponseEntity.ok("Conta removida com sucesso");
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping
     public ResponseEntity<String> movimentarConta(@RequestBody MovimentacaoForm form){
         try {
-            service.movimentacao(form);
+            service.movimentar(form);
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        return ResponseEntity.ok("Movimentação realizada com sucesso");
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/transferir")
     public ResponseEntity<String> transferir(@RequestBody TransferenciaForm form){
         try {
-            service.transferencia(form);
+            service.transferir(form);
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        return ResponseEntity.ok("Transferência realizada com sucesso");
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/extrato")
-    public ResponseEntity<String> extrato(DadosDaConta dadosDaConta){
+    public ResponseEntity<?> extrato(ContaCorrenteForm form){
 
-        ContaCorrente conta;
         try {
-            conta = service.buscaContaPor(dadosDaConta);
+            ExtratoView extrato = service.consultarExtrato(form);
+            return ResponseEntity.ok(extrato);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("Extrato - banco: ");
-        sb.append(conta.getBanco());
-        sb.append(" agência: ");
-        sb.append(conta.getAgencia());
-        sb.append(" conta: ");
-        sb.append(conta.getNumero());
-        sb.append("\n");
-
-        sb.append("Movimentações: \n");
-        conta.getMovimentacoes()
-                .forEach(movimentacao -> sb.append("\t" + movimentacao.getValor() + "\n"));
-
-        sb.append("Saldo: \t" + conta.getSaldo());
-
-        return ResponseEntity.ok(sb.toString());
     }
 
-    private <T> Map<Object, Object> validar(T form) {
-        Set<ConstraintViolation<T>> violacoes = validator.validate(form);
-        Map<Object, Object> collect = violacoes.stream()
-                .collect(Collectors.toMap(violacao -> violacao.getPropertyPath(), violacao -> violacao.getMessage()));
-        return collect;
-    }
 
 
 }

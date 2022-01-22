@@ -24,10 +24,6 @@ public class MovimentacaoDeConta {
         this.operacao = operacao;
     }
 
-    public int obterNumeroConta() {
-        return conta.obterNumeroConta();
-    }
-
     public Operacao getOperacao() {
         return operacao;
     }

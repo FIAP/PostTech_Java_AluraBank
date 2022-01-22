@@ -1,11 +1,15 @@
 package br.com.alura.alurabank.service;
 
+import br.com.alura.alurabank.controller.form.ContaCorrenteForm;
+import br.com.alura.alurabank.controller.form.CorrentistaForm;
 import br.com.alura.alurabank.controller.form.MovimentacaoForm;
 import br.com.alura.alurabank.controller.form.TransferenciaForm;
-import br.com.alura.alurabank.dominio.ContaCorrente;
-import br.com.alura.alurabank.dominio.DadosDaConta;
-import br.com.alura.alurabank.dominio.MovimentacaoDeConta;
-import br.com.alura.alurabank.dominio.Operacao;
+import br.com.alura.alurabank.controller.view.DadosDaContaView;
+import br.com.alura.alurabank.controller.view.ExtratoView;
+import br.com.alura.alurabank.converters.DadosDaContaCoverter;
+import br.com.alura.alurabank.converters.ExtratoConverter;
+import br.com.alura.alurabank.dominio.*;
+import br.com.alura.alurabank.factories.ContaFactory;
 import br.com.alura.alurabank.repositorio.RepositorioContasCorrente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,22 +23,54 @@ public class ContaService {
     @Autowired
     private RepositorioContasCorrente repositorioContasCorrente;
 
+    @Autowired
+    private ContaFactory factory;
 
-    public void movimentacao(MovimentacaoForm form) {
-        movimentar(form.getDadosDaConta(), form.getValor(), form.getOperacao());
+    @Autowired
+    private DadosDaContaCoverter dadosDaContaConverter;
+
+    @Autowired
+    private ExtratoConverter extratoConverter;
+
+    public ExtratoView consultarExtrato(ContaCorrenteForm form) {
+        ContaCorrente conta = buscaContaPor(form.toDadosDaConta());
+
+        return extratoConverter.convert(conta);
     }
 
-    public void transferencia(TransferenciaForm form) {
+
+    public DadosDaContaView criarConta(CorrentistaForm form) {
+        Correntista correntista = form.toCorrentista();
+
+        ContaCorrente conta = factory.criarConta(correntista);
+
+        repositorioContasCorrente.salvar(conta);
+
+        DadosDaConta dadosDaConta = conta.getDadosDaConta();
+        return dadosDaContaConverter.convert(dadosDaConta);
+    }
+
+    public void fecharConta(DadosDaConta dadosDaConta) {
+        ContaCorrente conta = buscaContaPor(dadosDaConta);
+
+        repositorioContasCorrente.remover(conta);
+    }
+
+    public void movimentar(MovimentacaoForm form) {
+        movimentarConta(form.getDadosDaConta(), form.getValor(), form.getOperacao());
+    }
+
+    public void transferir(TransferenciaForm form) {
         BigDecimal valor = form.getValor();
 
         DadosDaConta origem = form.getDadosDeOrigem();
-        movimentar(origem, valor, Operacao.SAQUE);
+        movimentarConta(origem, valor, Operacao.SAQUE);
 
         DadosDaConta destino = form.getDadosDeDestino();
-        movimentar(destino, valor, Operacao.DEPOSITO);
+        movimentarConta(destino, valor, Operacao.DEPOSITO);
     }
 
-    public ContaCorrente buscaContaPor(DadosDaConta dadosDaConta) {
+    private ContaCorrente buscaContaPor(DadosDaConta dadosDaConta) {
         Optional<ContaCorrente> opContaCorrente = repositorioContasCorrente
                 .buscar(dadosDaConta.getBanco(), dadosDaConta.getAgencia(), dadosDaConta.getNumero());
 
@@ -43,21 +79,11 @@ public class ContaService {
             throw new IllegalArgumentException("Conta não encontrada");
         }
 
-        ContaCorrente contaCorrente = opContaCorrente.get();
-
-        return contaCorrente;
+        return opContaCorrente.get();
     }
 
-    public void movimentar(DadosDaConta dadosDaConta, BigDecimal valor, Operacao operacao) {
-        Optional<ContaCorrente> opContaCorrente = repositorioContasCorrente
-                .buscar(dadosDaConta.getBanco(), dadosDaConta.getAgencia(), dadosDaConta.getNumero());
-
-
-        if (opContaCorrente.isEmpty()) {
-            throw new IllegalArgumentException("Conta não encontrada");
-        }
-
-        ContaCorrente contaCorrente = opContaCorrente.get();
+    private void movimentarConta(DadosDaConta dadosDaConta, BigDecimal valor, Operacao operacao) {
+        ContaCorrente contaCorrente = buscaContaPor(dadosDaConta);
 
         MovimentacaoDeConta movimentacao = new MovimentacaoDeConta(contaCorrente, valor, operacao);
         contaCorrente.movimentar(movimentacao);
