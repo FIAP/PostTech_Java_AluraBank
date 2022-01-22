@@ -3,6 +3,7 @@ package br.com.alura.alurabank.dominio;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
@@ -11,6 +12,7 @@ public class Correntista {
 
 
     @Id
+    @GeneratedValue
     private Integer id;
 
     private String cpf;
