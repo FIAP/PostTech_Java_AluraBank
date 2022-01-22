@@ -85,7 +85,7 @@ public class ContaService {
     private void movimentarConta(DadosDaConta dadosDaConta, BigDecimal valor, Operacao operacao) {
         ContaCorrente contaCorrente = buscaContaPor(dadosDaConta);
 
-        MovimentacaoDeConta movimentacao = new MovimentacaoDeConta(contaCorrente, valor, operacao);
+        MovimentacaoDeConta movimentacao = new MovimentacaoDeConta(valor, operacao);
         contaCorrente.movimentar(movimentacao);
         repositorioContasCorrente.salvar(contaCorrente);
 

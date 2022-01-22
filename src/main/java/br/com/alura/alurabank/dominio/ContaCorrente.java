@@ -6,19 +6,27 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 @EqualsAndHashCode(of = {"dadosDaConta"})
 public class ContaCorrente {
 
+    @Id
+    private Integer id;
+
     @Getter
     @Setter
+    @Embedded
     private DadosDaConta dadosDaConta;
 
+    @OneToOne
     private Correntista correntista;
 
+    @OneToMany
     private List<MovimentacaoDeConta> movimentacoes = new ArrayList<>();
 
     public ContaCorrente(String banco, String agencia, String numero, Correntista correntista){
@@ -26,7 +34,7 @@ public class ContaCorrente {
         this.correntista = correntista;
     }
 
-    public ContaCorrente() {
+    protected ContaCorrente() {
     }
 
     public boolean identificadaPor(String banco, String agencia, String numero) {
@@ -55,5 +63,9 @@ public class ContaCorrente {
 
     public List<MovimentacaoDeConta> getMovimentacoes() {
         return movimentacoes;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }

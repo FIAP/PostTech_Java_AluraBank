@@ -3,23 +3,29 @@ package br.com.alura.alurabank.dominio;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.util.Assert;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 
+@Entity
 public class MovimentacaoDeConta {
 
-    private ContaCorrente conta;
+    @Id
+    private Integer id;
+
 
     private BigDecimal valor;
 
     private Operacao operacao;
 
-    public MovimentacaoDeConta(ContaCorrente conta, BigDecimal valor, Operacao operacao) {
-        Assert.notNull(conta, "Conta não pode ser nula");
+    protected MovimentacaoDeConta() {
+    }
+
+    public MovimentacaoDeConta(BigDecimal valor, Operacao operacao) {
         Assert.notNull(valor, "Valor não pode ser nulo");
         Assert.isTrue(valor.compareTo(BigDecimal.ZERO) > 0, "Valor deve ser maior que zero");
         Assert.notNull(operacao, "Operação não pode ser nula");
 
-        this.conta = conta;
         this.valor = valor;
         this.operacao = operacao;
     }
