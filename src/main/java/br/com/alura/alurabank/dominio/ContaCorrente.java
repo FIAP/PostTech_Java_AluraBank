@@ -29,10 +29,6 @@ public class ContaCorrente {
     public ContaCorrente() {
     }
 
-    public int obterNumeroConta() {
-        return Integer.parseInt(dadosDaConta.getNumero());
-    }
-
     public boolean identificadaPor(String banco, String agencia, String numero) {
         return this.dadosDaConta.equals(new DadosDaConta(banco, agencia, numero));
     }
@@ -55,18 +51,6 @@ public class ContaCorrente {
         }
 
         movimentacoes.add(movimentacao);
-    }
-
-    public String getBanco() {
-        return dadosDaConta.getBanco();
-    }
-
-    public String getAgencia() {
-        return dadosDaConta.getAgencia();
-    }
-
-    public String getNumero() {
-        return dadosDaConta.getNumero();
     }
 
     public List<MovimentacaoDeConta> getMovimentacoes() {

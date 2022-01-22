@@ -25,17 +25,6 @@ public class DadosDaConta {
         return numero;
     }
 
-    public void setBanco(String banco) {
-        this.banco = banco;
-    }
-
-    public void setAgencia(String agencia) {
-        this.agencia = agencia;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
 
     @Override
     public boolean equals(Object o) {
