@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,7 +34,7 @@ public class ContaService {
         movimentar(destino, valor, Operacao.DEPOSITO);
     }
 
-    public ContaCorrente extrato(DadosDaConta dadosDaConta) {
+    public ContaCorrente buscaContaPor(DadosDaConta dadosDaConta) {
         Optional<ContaCorrente> opContaCorrente = repositorioContasCorrente
                 .buscar(dadosDaConta.getBanco(), dadosDaConta.getAgencia(), dadosDaConta.getNumero());
 

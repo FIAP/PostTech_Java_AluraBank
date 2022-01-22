@@ -7,7 +7,6 @@ import br.com.alura.alurabank.controller.form.TransferenciaForm;
 import br.com.alura.alurabank.dominio.ContaCorrente;
 import br.com.alura.alurabank.dominio.Correntista;
 import br.com.alura.alurabank.dominio.DadosDaConta;
-import br.com.alura.alurabank.dominio.MovimentacaoDeConta;
 import br.com.alura.alurabank.repositorio.RepositorioContasCorrente;
 import br.com.alura.alurabank.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +102,7 @@ public class ContaController {
 
         ContaCorrente conta;
         try {
-            conta = service.extrato(dadosDaConta);
+            conta = service.buscaContaPor(dadosDaConta);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
