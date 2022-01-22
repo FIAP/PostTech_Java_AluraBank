@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,6 +35,20 @@ public class ContaService {
         movimentar(destino, valor, Operacao.DEPOSITO);
     }
 
+    public ContaCorrente extrato(DadosDaConta dadosDaConta) {
+        Optional<ContaCorrente> opContaCorrente = repositorioContasCorrente
+                .buscar(dadosDaConta.getBanco(), dadosDaConta.getAgencia(), dadosDaConta.getNumero());
+
+
+        if (opContaCorrente.isEmpty()) {
+            throw new IllegalArgumentException("Conta não encontrada");
+        }
+
+        ContaCorrente contaCorrente = opContaCorrente.get();
+
+        return contaCorrente;
+    }
+
     public void movimentar(DadosDaConta dadosDaConta, BigDecimal valor, Operacao operacao) {
         Optional<ContaCorrente> opContaCorrente = repositorioContasCorrente
                 .buscar(dadosDaConta.getBanco(), dadosDaConta.getAgencia(), dadosDaConta.getNumero());
@@ -46,7 +61,7 @@ public class ContaService {
         ContaCorrente contaCorrente = opContaCorrente.get();
 
         MovimentacaoDeConta movimentacao = new MovimentacaoDeConta(contaCorrente, valor, operacao);
-        movimentacao.executarEm(contaCorrente);
+        contaCorrente.movimentar(movimentacao);
         repositorioContasCorrente.salvar(contaCorrente);
 
     }

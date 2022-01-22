@@ -7,13 +7,10 @@ import java.math.BigDecimal;
 
 public class MovimentacaoDeConta {
 
-    @JsonProperty
     private ContaCorrente conta;
 
-    @JsonProperty
     private BigDecimal valor;
 
-    @JsonProperty
     private Operacao operacao;
 
     public MovimentacaoDeConta(ContaCorrente conta, BigDecimal valor, Operacao operacao) {
@@ -31,19 +28,12 @@ public class MovimentacaoDeConta {
         return conta.obterNumeroConta();
     }
 
-    public String getBanco() {
-        return conta.getBanco();
+    public BigDecimal getValor() {
+        if (operacao.equals(Operacao.SAQUE)) {
+            return valor.negate();
+        }
+
+        return valor;
     }
 
-    public String getAgencia() {
-        return conta.getAgencia();
-    }
-
-    public String getNumero() {
-        return conta.getNumero();
-    }
-
-    public void executarEm(ContaCorrente contaCorrente) {
-         contaCorrente.executar(operacao, valor);
-    }
 }
