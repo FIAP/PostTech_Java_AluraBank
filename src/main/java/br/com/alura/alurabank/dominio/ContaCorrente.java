@@ -1,11 +1,14 @@
 package br.com.alura.alurabank.dominio;
 
+import br.com.alura.alurabank.controller.exceptions.SaldoInsuficienteException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode(of = {"dadosDaConta"})
 public class ContaCorrente {
@@ -16,17 +19,14 @@ public class ContaCorrente {
 
     private Correntista correntista;
 
-    private BigDecimal saldo;
+    private List<MovimentacaoDeConta> movimentacoes = new ArrayList<>();
 
     public ContaCorrente(String banco, String agencia, String numero, Correntista correntista){
-        this();
         this.dadosDaConta = new DadosDaConta(banco, agencia, numero);
-
         this.correntista = correntista;
     }
 
     public ContaCorrente() {
-        this.saldo = BigDecimal.ZERO;
     }
 
     public int obterNumeroConta() {
@@ -37,12 +37,24 @@ public class ContaCorrente {
         return this.dadosDaConta.equals(new DadosDaConta(banco, agencia, numero));
     }
 
-    public BigDecimal lerSaldo() {
-        return saldo;
+    public BigDecimal getSaldo() {
+        return movimentacoes
+                .stream()
+                .map(MovimentacaoDeConta::getValor)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public void executar(Operacao operacao, BigDecimal valor) {
-        saldo = operacao.executar(saldo, valor);
+    public void movimentar(MovimentacaoDeConta movimentacao) {
+
+
+        if (movimentacao.getOperacao().equals(Operacao.SAQUE)) {
+            BigDecimal saldo = getSaldo();
+            if (saldo.compareTo(movimentacao.getValor()) < 0) {
+                throw new SaldoInsuficienteException("Saldo insuficiente");
+            }
+        }
+
+        movimentacoes.add(movimentacao);
     }
 
     public String getBanco() {
@@ -55,5 +67,9 @@ public class ContaCorrente {
 
     public String getNumero() {
         return dadosDaConta.getNumero();
+    }
+
+    public List<MovimentacaoDeConta> getMovimentacoes() {
+        return movimentacoes;
     }
 }

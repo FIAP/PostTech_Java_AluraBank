@@ -6,6 +6,7 @@ import br.com.alura.alurabank.controller.form.MovimentacaoForm;
 import br.com.alura.alurabank.controller.form.TransferenciaForm;
 import br.com.alura.alurabank.dominio.ContaCorrente;
 import br.com.alura.alurabank.dominio.Correntista;
+import br.com.alura.alurabank.dominio.DadosDaConta;
 import br.com.alura.alurabank.repositorio.RepositorioContasCorrente;
 import br.com.alura.alurabank.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -40,7 +38,7 @@ public class ContaController {
                                  @RequestParam(name = "numero") String numero){
         ContaCorrente contaEncontrada = repositorioContasCorrente.buscar(banco, agencia, numero).orElse(new ContaCorrente());
 
-        return String.format("Banco: %s, Agência: %s, Conta: %s. Saldo: %s", banco, agencia, numero, contaEncontrada.lerSaldo());
+        return String.format("Banco: %s, Agência: %s, Conta: %s. Saldo: %s", banco, agencia, numero, contaEncontrada.getSaldo());
     }
 
     @PostMapping
@@ -97,6 +95,35 @@ public class ContaController {
         }
 
         return ResponseEntity.ok("Transferência realizada com sucesso");
+    }
+
+    @GetMapping("/extrato")
+    public ResponseEntity<String> extrato(DadosDaConta dadosDaConta){
+
+        ContaCorrente conta;
+        try {
+            conta = service.buscaContaPor(dadosDaConta);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Extrato - banco: ");
+        sb.append(conta.getBanco());
+        sb.append(" agência: ");
+        sb.append(conta.getAgencia());
+        sb.append(" conta: ");
+        sb.append(conta.getNumero());
+        sb.append("\n");
+
+        sb.append("Movimentações: \n");
+        conta.getMovimentacoes()
+                .forEach(movimentacao -> sb.append("\t" + movimentacao.getValor() + "\n"));
+
+        sb.append("Saldo: \t" + conta.getSaldo());
+
+        return ResponseEntity.ok(sb.toString());
     }
 
     private <T> Map<Object, Object> validar(T form) {

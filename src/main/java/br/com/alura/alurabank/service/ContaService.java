@@ -34,6 +34,20 @@ public class ContaService {
         movimentar(destino, valor, Operacao.DEPOSITO);
     }
 
+    public ContaCorrente buscaContaPor(DadosDaConta dadosDaConta) {
+        Optional<ContaCorrente> opContaCorrente = repositorioContasCorrente
+                .buscar(dadosDaConta.getBanco(), dadosDaConta.getAgencia(), dadosDaConta.getNumero());
+
+
+        if (opContaCorrente.isEmpty()) {
+            throw new IllegalArgumentException("Conta não encontrada");
+        }
+
+        ContaCorrente contaCorrente = opContaCorrente.get();
+
+        return contaCorrente;
+    }
+
     public void movimentar(DadosDaConta dadosDaConta, BigDecimal valor, Operacao operacao) {
         Optional<ContaCorrente> opContaCorrente = repositorioContasCorrente
                 .buscar(dadosDaConta.getBanco(), dadosDaConta.getAgencia(), dadosDaConta.getNumero());
@@ -46,7 +60,7 @@ public class ContaService {
         ContaCorrente contaCorrente = opContaCorrente.get();
 
         MovimentacaoDeConta movimentacao = new MovimentacaoDeConta(contaCorrente, valor, operacao);
-        movimentacao.executarEm(contaCorrente);
+        contaCorrente.movimentar(movimentacao);
         repositorioContasCorrente.salvar(contaCorrente);
 
     }
