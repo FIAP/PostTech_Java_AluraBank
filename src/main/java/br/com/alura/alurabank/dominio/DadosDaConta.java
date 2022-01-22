@@ -1,11 +1,16 @@
 package br.com.alura.alurabank.dominio;
 
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
+@Embeddable
 public class DadosDaConta {
     private String banco;
     private String agencia;
     private String numero;
+
+    protected DadosDaConta() {
+    }
 
     public DadosDaConta(String banco, String agencia, String numero) {
         this.banco = banco;
