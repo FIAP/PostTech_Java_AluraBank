@@ -12,11 +12,13 @@ import java.util.stream.Collectors;
 @Component
 public class ExtratoConverter {
 
-    public ExtratoView convert(ContaCorrente conta) {
-        List<BigDecimal> valores = conta.getMovimentacoes()
+    public ExtratoView convert(ContaCorrente conta, List<MovimentacaoDeConta> movimentacoes) {
+        List<BigDecimal> valores = movimentacoes
                                         .stream()
                                         .map(MovimentacaoDeConta::getValor)
                                         .collect(Collectors.toList());
-        return new ExtratoView(conta.getDadosDaConta(), valores ,conta.getSaldo());
+
+        BigDecimal saldo = movimentacoes.stream().map(MovimentacaoDeConta::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return new ExtratoView(conta.getDadosDaConta(), valores ,saldo);
     }
 }
