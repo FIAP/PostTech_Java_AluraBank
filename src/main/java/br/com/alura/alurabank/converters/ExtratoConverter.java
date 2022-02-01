@@ -2,6 +2,7 @@ package br.com.alura.alurabank.converters;
 
 import br.com.alura.alurabank.controller.view.ExtratoView;
 import br.com.alura.alurabank.dominio.ContaCorrente;
+import br.com.alura.alurabank.dominio.DadosDaConta;
 import br.com.alura.alurabank.dominio.MovimentacaoDeConta;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +13,16 @@ import java.util.stream.Collectors;
 @Component
 public class ExtratoConverter {
 
-    public ExtratoView convert(ContaCorrente conta) {
-        List<BigDecimal> valores = conta.getMovimentacoes()
+    public ExtratoView convert(DadosDaConta dadosDaConta, List<MovimentacaoDeConta> movimentacoes) {
+        List<BigDecimal> valores = movimentacoes
                                         .stream()
                                         .map(MovimentacaoDeConta::getValor)
                                         .collect(Collectors.toList());
-        return new ExtratoView(conta.getDadosDaConta(), valores ,conta.getSaldo());
+
+        BigDecimal saldo = movimentacoes.stream()
+                .map(MovimentacaoDeConta::getValor)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new ExtratoView(dadosDaConta, valores , saldo);
     }
 }
