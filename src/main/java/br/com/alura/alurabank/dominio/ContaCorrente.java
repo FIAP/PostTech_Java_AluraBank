@@ -16,6 +16,7 @@ import java.util.List;
 public class ContaCorrente {
 
     @Id
+    @GeneratedValue
     private Integer id;
 
     @Getter
@@ -23,10 +24,10 @@ public class ContaCorrente {
     @Embedded
     private DadosDaConta dadosDaConta;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Correntista correntista;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private List<MovimentacaoDeConta> movimentacoes = new ArrayList<>();
 
     public ContaCorrente(String banco, String agencia, String numero, Correntista correntista){

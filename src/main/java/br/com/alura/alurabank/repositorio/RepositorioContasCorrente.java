@@ -1,32 +1,18 @@
 package br.com.alura.alurabank.repositorio;
 
 import br.com.alura.alurabank.dominio.ContaCorrente;
-import org.springframework.stereotype.Repository;
+import br.com.alura.alurabank.dominio.DadosDaConta;
+import org.springframework.data.repository.Repository;
 
-import java.util.HashSet;
+
 import java.util.Optional;
-import java.util.Set;
 
-@Repository
-public class RepositorioContasCorrente {
+public interface RepositorioContasCorrente extends Repository<ContaCorrente, Integer> {
 
-    private Set<ContaCorrente> contas;
+    void save(ContaCorrente novaConta);
 
-    public RepositorioContasCorrente(){
-        contas = new HashSet<>();
-    }
+    Optional<ContaCorrente> findByDadosDaConta(DadosDaConta dadosDaConta);
 
-    public void salvar(ContaCorrente novaConta){
-        contas.add(novaConta);
-    }
+    void delete(ContaCorrente conta);
 
-    public Optional<ContaCorrente> buscar(String banco, String agencia, String numero){
-        return contas.stream()
-                .filter(contaCorrente -> contaCorrente.identificadaPor(banco, agencia, numero))
-                .findFirst();
-    }
-
-    public void remover(ContaCorrente conta) {
-        contas.remove(conta);
-    }
 }

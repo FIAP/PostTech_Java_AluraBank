@@ -3,19 +3,20 @@ package br.com.alura.alurabank.dominio;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.util.Assert;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 public class MovimentacaoDeConta {
 
     @Id
+    @GeneratedValue
     private Integer id;
 
 
     private BigDecimal valor;
 
+    @Enumerated(EnumType.STRING)
     private Operacao operacao;
 
     protected MovimentacaoDeConta() {

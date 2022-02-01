@@ -10,6 +10,7 @@ import br.com.alura.alurabank.converters.DadosDaContaCoverter;
 import br.com.alura.alurabank.converters.ExtratoConverter;
 import br.com.alura.alurabank.dominio.*;
 import br.com.alura.alurabank.factories.ContaFactory;
+import br.com.alura.alurabank.repositorio.CorrentistaRepository;
 import br.com.alura.alurabank.repositorio.RepositorioContasCorrente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ public class ContaService {
 
     @Autowired
     private RepositorioContasCorrente repositorioContasCorrente;
+
+    @Autowired
+    private CorrentistaRepository correntistaRepository;
 
     @Autowired
     private ContaFactory factory;
@@ -42,9 +46,11 @@ public class ContaService {
     public DadosDaContaView criarConta(CorrentistaForm form) {
         Correntista correntista = form.toCorrentista();
 
+        correntistaRepository.save(correntista);
+
         ContaCorrente conta = factory.criarConta(correntista);
 
-        repositorioContasCorrente.salvar(conta);
+        repositorioContasCorrente.save(conta);
 
         DadosDaConta dadosDaConta = conta.getDadosDaConta();
         return dadosDaContaConverter.convert(dadosDaConta);
@@ -53,7 +59,7 @@ public class ContaService {
     public void fecharConta(DadosDaConta dadosDaConta) {
         ContaCorrente conta = buscaContaPor(dadosDaConta);
 
-        repositorioContasCorrente.remover(conta);
+        repositorioContasCorrente.delete(conta);
     }
 
     public void movimentar(MovimentacaoForm form) {
@@ -72,7 +78,7 @@ public class ContaService {
 
     private ContaCorrente buscaContaPor(DadosDaConta dadosDaConta) {
         Optional<ContaCorrente> opContaCorrente = repositorioContasCorrente
-                .buscar(dadosDaConta.getBanco(), dadosDaConta.getAgencia(), dadosDaConta.getNumero());
+                .findByDadosDaConta(dadosDaConta);
 
 
         if (opContaCorrente.isEmpty()) {
@@ -87,7 +93,7 @@ public class ContaService {
 
         MovimentacaoDeConta movimentacao = new MovimentacaoDeConta(valor, operacao);
         contaCorrente.movimentar(movimentacao);
-        repositorioContasCorrente.salvar(contaCorrente);
+        repositorioContasCorrente.save(contaCorrente);
 
     }
 }
