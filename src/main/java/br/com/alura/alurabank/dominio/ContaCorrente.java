@@ -12,6 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+          name = "pegaTudo",
+          includeAllAttributes = true
+        ),
+
+        @NamedEntityGraph(
+                name = "contaComCorrentista",
+                attributeNodes = {
+                        @NamedAttributeNode("correntista"),
+                }
+
+        )
+})
+
 @EqualsAndHashCode(of = {"dadosDaConta"})
 public class ContaCorrente {
 
@@ -24,11 +39,8 @@ public class ContaCorrente {
     @Embedded
     private DadosDaConta dadosDaConta;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Correntista correntista;
-
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-    private List<MovimentacaoDeConta> movimentacoes = new ArrayList<>();
 
     public ContaCorrente(String banco, String agencia, String numero, Correntista correntista){
         this.dadosDaConta = new DadosDaConta(banco, agencia, numero);
@@ -40,30 +52,6 @@ public class ContaCorrente {
 
     public boolean identificadaPor(String banco, String agencia, String numero) {
         return this.dadosDaConta.equals(new DadosDaConta(banco, agencia, numero));
-    }
-
-    public BigDecimal getSaldo() {
-        return movimentacoes
-                .stream()
-                .map(MovimentacaoDeConta::getValor)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    public void movimentar(MovimentacaoDeConta movimentacao) {
-
-
-        if (movimentacao.getOperacao().equals(Operacao.SAQUE)) {
-            BigDecimal saldo = getSaldo();
-            if (saldo.compareTo(movimentacao.getValor()) < 0) {
-                throw new SaldoInsuficienteException("Saldo insuficiente");
-            }
-        }
-
-        movimentacoes.add(movimentacao);
-    }
-
-    public List<MovimentacaoDeConta> getMovimentacoes() {
-        return movimentacoes;
     }
 
     public Integer getId() {

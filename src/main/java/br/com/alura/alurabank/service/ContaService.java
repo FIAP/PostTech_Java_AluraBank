@@ -11,11 +11,13 @@ import br.com.alura.alurabank.converters.ExtratoConverter;
 import br.com.alura.alurabank.dominio.*;
 import br.com.alura.alurabank.factories.ContaFactory;
 import br.com.alura.alurabank.repositorio.CorrentistaRepository;
+import br.com.alura.alurabank.repositorio.MovimentacaoRepository;
 import br.com.alura.alurabank.repositorio.RepositorioContasCorrente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +28,9 @@ public class ContaService {
 
     @Autowired
     private CorrentistaRepository correntistaRepository;
+
+    @Autowired
+    private MovimentacaoRepository movimentacaoRepository;
 
     @Autowired
     private ContaFactory factory;
@@ -39,7 +44,9 @@ public class ContaService {
     public ExtratoView consultarExtrato(ContaCorrenteForm form) {
         ContaCorrente conta = buscaContaPor(form.toDadosDaConta());
 
-        return extratoConverter.convert(conta);
+        List<MovimentacaoDeConta> movimentacoes = movimentacaoRepository.findAllByConta(conta);
+
+        return extratoConverter.convert(conta.getDadosDaConta(), movimentacoes);
     }
 
 
@@ -91,9 +98,11 @@ public class ContaService {
     private void movimentarConta(DadosDaConta dadosDaConta, BigDecimal valor, Operacao operacao) {
         ContaCorrente contaCorrente = buscaContaPor(dadosDaConta);
 
-        MovimentacaoDeConta movimentacao = new MovimentacaoDeConta(valor, operacao);
-        contaCorrente.movimentar(movimentacao);
-        repositorioContasCorrente.save(contaCorrente);
+        MovimentacaoDeConta movimentacao = new MovimentacaoDeConta(contaCorrente, valor, operacao);
+
+
+
+        movimentacaoRepository.save(movimentacao);
 
     }
 }
