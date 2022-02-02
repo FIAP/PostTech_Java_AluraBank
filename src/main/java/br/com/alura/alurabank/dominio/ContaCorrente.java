@@ -31,7 +31,7 @@ import java.util.List;
 public class ContaCorrente {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Getter

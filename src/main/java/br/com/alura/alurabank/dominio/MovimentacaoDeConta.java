@@ -1,6 +1,5 @@
 package br.com.alura.alurabank.dominio;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -8,10 +7,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "movimentacoes")
 public class MovimentacaoDeConta {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private BigDecimal valor;
@@ -22,7 +22,7 @@ public class MovimentacaoDeConta {
     @ManyToOne
     private ContaCorrente conta;
 
-    private LocalDateTime dataDaMovimentacao = LocalDateTime.now();
+    private LocalDateTime data = LocalDateTime.now();
 
     protected MovimentacaoDeConta() {
     }
@@ -50,8 +50,8 @@ public class MovimentacaoDeConta {
         return valor;
     }
 
-    public LocalDateTime getDataDaMovimentacao() {
-        return dataDaMovimentacao;
+    public LocalDateTime getData() {
+        return data;
     }
 
     public ContaCorrente getConta() {
