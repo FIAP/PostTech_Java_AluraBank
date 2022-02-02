@@ -1,109 +1,147 @@
 {
 	"info": {
-		"_postman_id": "9e2a8ef0-5adc-457c-9dab-1475be75ca21",
+		"_postman_id": "53ed840e-7a11-4698-977f-0ae41359b034",
 		"name": "alura-bank",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "obter o saldo da conta",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}?banco=333&agencia=44444&numero=2039304461",
-					"host": [
-						"{{url}}"
-					],
-					"query": [
-						{
-							"key": "banco",
-							"value": "333"
+			"name": "Conta",
+			"item": [
+				{
+					"name": "Abertura de conta",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Rodrigo Vieira\",\n    \"cpf\": \"27329616800\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
-						{
-							"key": "agencia",
-							"value": "44444"
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Movimentar uma conta",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"valor\": \"10.00\",\n  \"operacao\": 1,\n  \"conta\": {\n    \"banco\": \"333\",\n    \"agencia\": \"44444\",\n    \"numero\": \"2039304461\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
-						{
-							"key": "numero",
-							"value": "2039304461"
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "Fechar uma conta",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"banco\": \"333\",\n  \"agencia\": \"44444\",\n  \"numero\": \"2039304461\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transferencia",
+					"request": {
+						"method": "PUT",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Extrato",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Abertura de conta",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"nome\": \"Rodrigo Vieira\",\n    \"cpf\": \"27329616800\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}",
-					"host": [
-						"{{url}}"
-					]
+			"name": "Movimentacoes",
+			"item": [
+				{
+					"name": "Filtar",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		},
 		{
-			"name": "Movimentar uma conta",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"valor\": \"10.00\",\n  \"operacao\": 1,\n  \"conta\": {\n    \"banco\": \"333\",\n    \"agencia\": \"44444\",\n    \"numero\": \"2039304461\"\n  }\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}",
-					"host": [
-						"{{url}}"
-					]
-				}
-			},
-			"response": []
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:8080/contas",
+			"type": "default"
 		},
 		{
-			"name": "Fechar uma conta",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"banco\": \"333\",\n  \"agencia\": \"44444\",\n  \"numero\": \"2039304461\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}",
-					"host": [
-						"{{url}}"
-					]
-				}
-			},
-			"response": []
+			"key": "urlMovimentacao",
+			"value": "http://localhost:8080/movimentacoes",
+			"type": "default"
 		}
 	]
 }
