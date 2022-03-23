@@ -1,5 +1,6 @@
 package br.com.alura.alurabank.service;
 
+import br.com.alura.alurabank.controller.exceptions.SaldoInsuficienteException;
 import br.com.alura.alurabank.controller.form.ContaCorrenteForm;
 import br.com.alura.alurabank.controller.form.CorrentistaForm;
 import br.com.alura.alurabank.controller.form.MovimentacaoForm;
@@ -98,9 +99,19 @@ public class ContaService {
     private void movimentarConta(DadosDaConta dadosDaConta, BigDecimal valor, Operacao operacao) {
         ContaCorrente contaCorrente = buscaContaPor(dadosDaConta);
 
+        if (operacao.equals(Operacao.SAQUE)) {
+            BigDecimal saldo = movimentacaoRepository
+                    .findAllByConta(contaCorrente)
+                    .stream()
+                    .map(MovimentacaoDeConta::getValor)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            if (saldo.compareTo(valor) < 0 ) {
+                throw new SaldoInsuficienteException("Saldo insuficiente para a operação");
+            }
+        }
+
         MovimentacaoDeConta movimentacao = new MovimentacaoDeConta(contaCorrente, valor, operacao);
-
-
 
         movimentacaoRepository.save(movimentacao);
 
