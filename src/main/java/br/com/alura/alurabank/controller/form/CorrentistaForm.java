@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 public class CorrentistaForm {
 
     @JsonProperty
-    @CPF
+    @CPF(message = "CPF invalido")
     @NotNull(message = "CPF é um campo obrigatório")
     private String cpf;
     @JsonProperty

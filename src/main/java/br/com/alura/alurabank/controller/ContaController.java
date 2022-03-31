@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/contas")
 public class ContaController {
@@ -19,9 +21,8 @@ public class ContaController {
     @Autowired
     private ContaService service;
 
-
     @PostMapping
-    public ResponseEntity<?> criarNovaConta(@RequestBody CorrentistaForm correntistaForm){
+    public ResponseEntity<?> criarNovaConta(@Valid @RequestBody CorrentistaForm correntistaForm){
 
         DadosDaContaView dadosDaConta = service.criarConta(correntistaForm);
 
@@ -29,49 +30,36 @@ public class ContaController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> fecharConta(@RequestBody ContaCorrenteForm contaForm){
-        try {
-            service.fecharConta(contaForm.toDadosDaConta());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<?> fecharConta(@Valid @RequestBody ContaCorrenteForm contaForm){
+
+        service.fecharConta(contaForm.toDadosDaConta());
+
 
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping
-    public ResponseEntity<String> movimentarConta(@RequestBody MovimentacaoForm form){
-        try {
-            service.movimentar(form);
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<String> movimentarConta(@Valid @RequestBody MovimentacaoForm form){
+
+        service.movimentar(form);
 
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/transferir")
-    public ResponseEntity<String> transferir(@RequestBody TransferenciaForm form){
-        try {
-            service.transferir(form);
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<String> transferir(@Valid @RequestBody TransferenciaForm form){
+
+        service.transferir(form);
+
 
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/extrato")
-    public ResponseEntity<?> extrato(ContaCorrenteForm form){
+    public ResponseEntity<?> extrato(@Valid ContaCorrenteForm form){
+        ExtratoView extrato = service.consultarExtrato(form);
 
-        try {
-            ExtratoView extrato = service.consultarExtrato(form);
-            return ResponseEntity.ok(extrato);
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(extrato);
     }
 
 

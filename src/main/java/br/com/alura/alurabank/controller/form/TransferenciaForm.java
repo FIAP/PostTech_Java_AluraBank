@@ -2,13 +2,20 @@ package br.com.alura.alurabank.controller.form;
 
 import br.com.alura.alurabank.dominio.DadosDaConta;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class TransferenciaForm {
+    @NotNull
     private DadosDaConta dadosDeOrigem;
 
+    @NotNull
     private DadosDaConta dadosDeDestino;
 
+
+    @DecimalMin("0.1")
+    @NotNull
     private BigDecimal valor;
 
     public DadosDaConta getDadosDeOrigem() {

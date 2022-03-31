@@ -1,5 +1,6 @@
 package br.com.alura.alurabank.service;
 
+import br.com.alura.alurabank.controller.exceptions.ContaNaoEncontradaException;
 import br.com.alura.alurabank.controller.exceptions.SaldoInsuficienteException;
 import br.com.alura.alurabank.controller.form.ContaCorrenteForm;
 import br.com.alura.alurabank.controller.form.CorrentistaForm;
@@ -91,7 +92,7 @@ public class ContaService {
 
 
         if (opContaCorrente.isEmpty()) {
-            throw new IllegalArgumentException("Conta não encontrada");
+            throw new ContaNaoEncontradaException("Conta não encontrada");
         }
 
         return opContaCorrente.get();
