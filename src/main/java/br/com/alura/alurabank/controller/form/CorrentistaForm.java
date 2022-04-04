@@ -17,6 +17,14 @@ public class CorrentistaForm {
     @NotBlank(message = "Nome do Correntista é um campo obrigatório e não pode estar em branco")
     private String nome;
 
+    CorrentistaForm() {
+    }
+
+    public CorrentistaForm(String nome, String cpf) {
+        this.cpf = cpf;
+        this.nome = nome;
+    }
+
     public Correntista toCorrentista(){
         return new Correntista(cpf, nome);
     }

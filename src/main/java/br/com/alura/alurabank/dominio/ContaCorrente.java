@@ -57,4 +57,8 @@ public class ContaCorrente {
     public Integer getId() {
         return id;
     }
+
+    public Correntista getCorrentista() {
+        return correntista;
+    }
 }

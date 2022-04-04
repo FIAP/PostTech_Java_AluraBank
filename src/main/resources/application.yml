@@ -8,3 +8,13 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+---
+spring:
+  profiles:
+    active: test
+  datasource:
+    url: jdbc:postgresql://localhost:5432/alurabanktest
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
