@@ -3,10 +3,16 @@ package br.com.alura.alurabank.controller.form;
 import br.com.alura.alurabank.dominio.DadosDaConta;
 import br.com.alura.alurabank.dominio.Operacao;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class MovimentacaoForm {
+    @NotNull
     private DadosDaConta dadosDaConta;
+
+    @NotNull
+    @DecimalMin("0.1")
     private BigDecimal valor;
 
     public Operacao getOperacao() {
