@@ -14,7 +14,7 @@ import java.util.List;
 public interface MovimentacaoRepository extends Repository<MovimentacaoDeConta, Integer> {
     List<MovimentacaoDeConta> findAllByConta(ContaCorrente conta);
 
-    @Query("SELECT m FROM  MovimentacaoDeConta m JOIN m.conta cc WHERE  cc.dadosDaConta = :dadosDaConta AND m.operacao = :operacao AND m.dataDaMovimentacao BETWEEN  :inicio AND :fim")
+    @Query("SELECT m FROM  MovimentacaoDeConta m JOIN m.conta cc WHERE  cc.dadosDaConta = :dadosDaConta AND m.operacao = :operacao AND m.data BETWEEN  :inicio AND :fim")
     List<MovimentacaoDeConta> filterMovimentacoesBy(@Param("dadosDaConta") DadosDaConta dadosDaConta, @Param("inicio") LocalDateTime inicio, @Param("fim") LocalDateTime fim, @Param("operacao") Operacao operacao);
 
     void save(MovimentacaoDeConta movimentacao);

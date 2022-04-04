@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class MovimentacaoConverter {
     public MovimentacaoView convert(MovimentacaoDeConta movimentacaoDeConta) {
         return new MovimentacaoView(
-                movimentacaoDeConta.getDataDaMovimentacao(),
+                movimentacaoDeConta.getData(),
                 movimentacaoDeConta.getValor());
     }
 }
