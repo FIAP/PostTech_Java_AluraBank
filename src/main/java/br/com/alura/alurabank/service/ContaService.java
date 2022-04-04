@@ -1,5 +1,7 @@
 package br.com.alura.alurabank.service;
 
+import br.com.alura.alurabank.controller.exceptions.ContaNaoEncontradaException;
+import br.com.alura.alurabank.controller.exceptions.SaldoInsuficienteException;
 import br.com.alura.alurabank.controller.form.ContaCorrenteForm;
 import br.com.alura.alurabank.controller.form.CorrentistaForm;
 import br.com.alura.alurabank.controller.form.MovimentacaoForm;
@@ -12,7 +14,7 @@ import br.com.alura.alurabank.dominio.*;
 import br.com.alura.alurabank.factories.ContaFactory;
 import br.com.alura.alurabank.repositorio.CorrentistaRepository;
 import br.com.alura.alurabank.repositorio.MovimentacaoRepository;
-import br.com.alura.alurabank.repositorio.RepositorioContasCorrente;
+import br.com.alura.alurabank.repositorio.ContasCorrenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,20 +25,21 @@ import java.util.Optional;
 @Service
 public class ContaService {
 
-    @Autowired
-    private RepositorioContasCorrente repositorioContasCorrente;
+    private final ContasCorrenteRepository contasCorrenteRepository;
+    private final CorrentistaRepository correntistaRepository;
+    private final MovimentacaoRepository movimentacaoRepository;
+    private final ContaFactory factory;
+    private final DadosDaContaCoverter dadosDaContaConverter;
 
-    @Autowired
-    private CorrentistaRepository correntistaRepository;
 
-    @Autowired
-    private MovimentacaoRepository movimentacaoRepository;
-
-    @Autowired
-    private ContaFactory factory;
-
-    @Autowired
-    private DadosDaContaCoverter dadosDaContaConverter;
+    public ContaService(ContasCorrenteRepository contasCorrenteRepository, CorrentistaRepository correntistaRepository, MovimentacaoRepository movimentacaoRepository, ContaFactory factory, DadosDaContaCoverter dadosDaContaConverter, ExtratoConverter extratoConverter) {
+        this.contasCorrenteRepository = contasCorrenteRepository;
+        this.correntistaRepository = correntistaRepository;
+        this.movimentacaoRepository = movimentacaoRepository;
+        this.factory = factory;
+        this.dadosDaContaConverter = dadosDaContaConverter;
+        this.extratoConverter = extratoConverter;
+    }
 
     @Autowired
     private ExtratoConverter extratoConverter;
@@ -57,7 +60,7 @@ public class ContaService {
 
         ContaCorrente conta = factory.criarConta(correntista);
 
-        repositorioContasCorrente.save(conta);
+        contasCorrenteRepository.save(conta);
 
         DadosDaConta dadosDaConta = conta.getDadosDaConta();
         return dadosDaContaConverter.convert(dadosDaConta);
@@ -66,7 +69,7 @@ public class ContaService {
     public void fecharConta(DadosDaConta dadosDaConta) {
         ContaCorrente conta = buscaContaPor(dadosDaConta);
 
-        repositorioContasCorrente.delete(conta);
+        contasCorrenteRepository.delete(conta);
     }
 
     public void movimentar(MovimentacaoForm form) {
@@ -84,12 +87,12 @@ public class ContaService {
     }
 
     private ContaCorrente buscaContaPor(DadosDaConta dadosDaConta) {
-        Optional<ContaCorrente> opContaCorrente = repositorioContasCorrente
+        Optional<ContaCorrente> opContaCorrente = contasCorrenteRepository
                 .findByDadosDaConta(dadosDaConta);
 
 
         if (opContaCorrente.isEmpty()) {
-            throw new IllegalArgumentException("Conta não encontrada");
+            throw new ContaNaoEncontradaException("Conta não encontrada");
         }
 
         return opContaCorrente.get();
@@ -98,9 +101,19 @@ public class ContaService {
     private void movimentarConta(DadosDaConta dadosDaConta, BigDecimal valor, Operacao operacao) {
         ContaCorrente contaCorrente = buscaContaPor(dadosDaConta);
 
+        if (operacao.equals(Operacao.SAQUE)) {
+            BigDecimal saldo = movimentacaoRepository
+                    .findAllByConta(contaCorrente)
+                    .stream()
+                    .map(MovimentacaoDeConta::getValor)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            if (saldo.compareTo(valor) < 0 ) {
+                throw new SaldoInsuficienteException("Saldo insuficiente para a operação");
+            }
+        }
+
         MovimentacaoDeConta movimentacao = new MovimentacaoDeConta(contaCorrente, valor, operacao);
-
-
 
         movimentacaoRepository.save(movimentacao);
 

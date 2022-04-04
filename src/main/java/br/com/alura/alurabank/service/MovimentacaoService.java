@@ -8,7 +8,7 @@ import br.com.alura.alurabank.dominio.DadosDaConta;
 import br.com.alura.alurabank.dominio.MovimentacaoDeConta;
 import br.com.alura.alurabank.dominio.Operacao;
 import br.com.alura.alurabank.repositorio.MovimentacaoRepository;
-import br.com.alura.alurabank.repositorio.RepositorioContasCorrente;
+import br.com.alura.alurabank.repositorio.ContasCorrenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class MovimentacaoService {
     private MovimentacaoRepository repository;
 
     @Autowired
-    private RepositorioContasCorrente contasCorrenteRepository;
+    private ContasCorrenteRepository contasCorrenteRepository;
 
     @Autowired
     private MovimentacaoConverter converter;

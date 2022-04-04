@@ -10,12 +10,20 @@ import javax.validation.constraints.NotNull;
 public class CorrentistaForm {
 
     @JsonProperty
-    @CPF
+    @CPF(message = "CPF invalido")
     @NotNull(message = "CPF é um campo obrigatório")
     private String cpf;
     @JsonProperty
     @NotBlank(message = "Nome do Correntista é um campo obrigatório e não pode estar em branco")
     private String nome;
+
+    CorrentistaForm() {
+    }
+
+    public CorrentistaForm(String nome, String cpf) {
+        this.cpf = cpf;
+        this.nome = nome;
+    }
 
     public Correntista toCorrentista(){
         return new Correntista(cpf, nome);
