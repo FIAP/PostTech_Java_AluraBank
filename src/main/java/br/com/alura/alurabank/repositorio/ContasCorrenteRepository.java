@@ -17,4 +17,6 @@ public interface ContasCorrenteRepository extends Repository<ContaCorrente, Inte
 
     void delete(ContaCorrente conta);
 
+    long count();
+
 }

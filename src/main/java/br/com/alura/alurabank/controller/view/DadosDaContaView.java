@@ -5,6 +5,9 @@ public class DadosDaContaView {
     private String agencia;
     private String numero;
 
+    DadosDaContaView() {
+    }
+
     public DadosDaContaView(String banco, String agencia, String numero) {
         this.banco = banco;
         this.agencia = agencia;
