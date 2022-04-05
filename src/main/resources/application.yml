@@ -10,8 +10,9 @@ spring:
     show-sql: true
 ---
 spring:
-  profiles:
-    active: test
+  config:
+    activate:
+      on-profile: test
   datasource:
     url: jdbc:postgresql://localhost:5432/alurabanktest
   jpa:
