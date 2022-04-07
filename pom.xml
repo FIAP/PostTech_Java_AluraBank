@@ -60,6 +60,12 @@
 		</dependency>
 
 
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.6</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -102,7 +108,7 @@
 										<limit>
 											<counter>LINE</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>0.50</minimum>
+											<minimum>0.85</minimum>
 										</limit>
 									</limits>
 								</rule>
