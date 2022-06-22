@@ -1,3 +1,13 @@
+# Client Credentials Grant
+
+Esse grant serve deve ser usado quando precisamos autenticar uma aplicação (software) em outra.
+Ele também é conhecido como **machine to machine** (De máquina para máquina).
+[Official documentation](https://oauth.net/2/grant-types/client-credentials/)
+
+## Fluxos
+
+### Obter o token
+
 ```mermaid
 sequenceDiagram
     participant C   as AluraBank [Resource Owner]
@@ -9,6 +19,7 @@ sequenceDiagram
     AS->>C: Envia o access token
 ```
 
+### Validação com sucesso do access token 
 ```mermaid
 sequenceDiagram
     participant C   as AluraBank [Resource Owner]
@@ -23,6 +34,8 @@ sequenceDiagram
     RS->>C: [201] Deu bom!
 ```
 
+
+### Falha na validação do access token
 ```mermaid
 sequenceDiagram
     participant C   as AluraBank [Resource Owner]
