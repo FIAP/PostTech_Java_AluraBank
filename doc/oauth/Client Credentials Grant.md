@@ -1,8 +1,10 @@
 # Client Credentials Grant
 
 Esse grant serve deve ser usado quando precisamos autenticar uma aplicação (software) em outra.
+
 Ele também é conhecido como **machine to machine** (De máquina para máquina).
-[Official documentation](https://oauth.net/2/grant-types/client-credentials/)
+
+[Documentação oficial](https://oauth.net/2/grant-types/client-credentials/)
 
 ## Fluxos
 
