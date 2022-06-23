@@ -3,7 +3,11 @@
 Esse grant geralmente é usado em cenários onde o **resource owner** (usuário) quer utilizar um **agent** (aplicação cliente) 
 para acessar seus dados no **resource server** (servidor com as informações do usuário).
 
-Porém deve existir um alto grau de confiança entre o **agent** e o **authorization server**.
+Porém, deve existir um alto grau de confiança entre o **agent** e o **authorization server**.
+
+Como o nome desse _grant_ é bem extenso, é comum se referir a ele como **Password Grant**
+
+[Documentação oficial](https://www.oauth.com/oauth2-servers/access-tokens/password-grant/)
 
 ## Flows
 
