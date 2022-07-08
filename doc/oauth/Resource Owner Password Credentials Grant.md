@@ -15,7 +15,7 @@ Como o nome desse _grant_ é bem extenso, é comum se referir a ele como **Passw
 ```mermaid
 sequenceDiagram
     actor       C   as Usuario [Resource Owner]
-    participant A   as iFood App [Agent]
+    participant A   as Facebook App [Agent]
     participant AS  as Facebook [AuthZ Server]
 
     C->>A: Inicia o login com Facebook
@@ -31,7 +31,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     actor       C   as Usuario [Resource Owner]
-    participant A   as iFood App [Agent]
+    participant A   as Facebook App [Agent]
     participant AS  as Facebook [AuthZ Server]
     participant RS  as Facebook [Resource Server]
     participant DB  as Database da Timeline
