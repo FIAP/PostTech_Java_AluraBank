@@ -26,11 +26,10 @@ sequenceDiagram
     C->>A: Inicia o login com Facebook
     A->>C: Abre o navegador com URL do FB
     C->>AS: Quero me autenticar GET client_id, redirect_uri
-    AS->>C: Tela de login 302/307
+    AS->>C: Tela de login 302
     C->>AS: Usuario/senha
     AS->>AS: Valida credenciais do Resource Owner
-    AS->>C: 302/307 -> redirect uri ? code - Solicita confirmação 
-    C->>CL: POST Confimo - code
+    AS->>CL: 302 -> redirect uri ? code - Solicita confirmação 
     CL->>AS: POST code, client id+secret 
     AS->>AS: Valida credenciais do Client App
     AS->>CL: Access Token
