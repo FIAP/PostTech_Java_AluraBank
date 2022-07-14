@@ -12,8 +12,16 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/test-oauth
-          jwk-set-uri: http://localhost:8180/realms/test-oauth/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8180/realms/alura
+          jwk-set-uri: http://localhost:8180/realms/alura/protocol/openid-connect/certs
+
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: app
+      scopes: openid
+      use-pkce-with-authorization-code-grant: true
+
 ---
 spring:
   config:

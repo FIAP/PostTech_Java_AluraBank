@@ -12,7 +12,10 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/token").hasAuthority("SCOPE_customer")
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/v3/api-docs/**").permitAll()
+                .antMatchers("/contas/extrato").hasAuthority("SCOPE_read-balance")
                 .anyRequest().authenticated()
                 .and().oauth2ResourceServer().jwt();
 
