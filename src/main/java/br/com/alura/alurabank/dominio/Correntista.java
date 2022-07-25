@@ -21,6 +21,8 @@ public class Correntista {
 
     private LocalDate dataEntrada = LocalDate.now();
 
+    private String externalId;
+
     protected Correntista(){}
 
     public Correntista(String cpf, String nome) {
@@ -38,5 +40,13 @@ public class Correntista {
 
     public LocalDate getDataEntrada() {
         return dataEntrada;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 }
