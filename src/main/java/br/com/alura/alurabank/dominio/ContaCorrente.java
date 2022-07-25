@@ -61,4 +61,8 @@ public class ContaCorrente {
     public Correntista getCorrentista() {
         return correntista;
     }
+
+    public DadosDaConta getDadosDaConta() {
+        return dadosDaConta;
+    }
 }
