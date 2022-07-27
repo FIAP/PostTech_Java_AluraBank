@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+  kong:
+    image: kong:2.5.0
+    hostname: kong
+    container_name: kong
+    environment:
+      KONG_DATABASE: 'off'
+      KONG_PROXY_ACCESS_LOG: '/dev/stdout'
+      KONG_ADMIN_ACCESS_LOG: '/dev/stdout'
+      KONG_PROXY_ERROR_LOG: '/dev/stderr'
+      KONG_ADMIN_ERROR_LOG: '/dev/stderr'
+      KONG_ADMIN_LISTEN: "0.0.0.0:8001, 0.0.0.0:8444 ssl"
+      KONG_DECLARATIVE_CONFIG: "/opt/kong/kong.yaml"
+    command: "kong start"
+    ports:
+      - "8000:8000"
+      - "8443:8443"
+      - "8001:8001"
+      - "8444:8444"
+    volumes:
+      - ./config:/opt/kong
+  quote-service1:
+    image: fwfurtado/quotes
+    hostname: quotes1
+    container_name: quotes1
+    depends_on:
+      - kong
+    ports:
+      - "8081:8080"
+  quote-service2:
+    image: fwfurtado/quotes
+    hostname: quotes2
+    container_name: quotes2
+    depends_on:
+      - kong
+    ports:
+      - "8082:8080"
