@@ -1,0 +1,16 @@
+_format_version: "2.1"
+_transform: true
+
+services:
+  - name: quote-service
+    host: quote_upstream
+    routes:
+      - name: quote-service-routes
+        strip_path: true
+        paths:
+          - /
+upstreams:
+  - name: quote_upstream
+    targets:
+      - target: quotes1:8080
+      - target: quotes2:8080
