@@ -1,20 +1,25 @@
 version: '3.7'
 
 services:
-  curl:
-    image: ubuntu-curl
-    command:
-      - "curl"
-      - "http://python:8080"
-    depends_on:
-      - python
-  python:
-    image: ubuntu-python
-    working_dir: "/site"
-    command:
-      - "/usr/bin/python3"
-      - "-m"
-      - "http.server"
-      - "8080"
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: alurabank
     ports:
-      - "8000:8080"
+      - "5432:5432"
+    volumes:
+      - "./data/:/var/lib/postgresql/data"
+  keycloak:
+    image: quay.io/keycloak/keycloak:19.0.0
+    command:
+      - "start-dev"
+      - "--http-port=8081"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8081:8081"
+
+
