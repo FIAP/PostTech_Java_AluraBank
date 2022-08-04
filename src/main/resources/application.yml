@@ -1,6 +1,3 @@
-server:
-  port: 8081
-
 alura:
   database:
     url: jdbc:postgresql://localhost:5432/alurabank

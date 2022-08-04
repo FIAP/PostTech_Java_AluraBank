@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   db:
-    image: postgres
+    image: postgres:latest
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres
@@ -10,16 +10,30 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - "./data/:/var/lib/postgresql/data"
+      - "storage:/var/lib/postgresql/data"
   keycloak:
     image: quay.io/keycloak/keycloak:19.0.0
     command:
       - "start-dev"
-      - "--http-port=8081"
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
-      - "8081:8081"
+      - "8180:8080"
+  bank:
+    image: alura/bank
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/alurabank
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      KEYCLOAK_REALM_URL: http://keycloak:8080/realms/alura
+    depends_on:
+      - db
+      - keycloak
+    ports:
+      - "8080:8080"
 
 
+
+volumes:
+  storage:
