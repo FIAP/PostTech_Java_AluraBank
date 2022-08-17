@@ -4,7 +4,6 @@ import br.com.alura.alurabank.dominio.DadosDaConta;
 import br.com.alura.alurabank.dominio.Operacao;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.expression.spel.ast.OpOr;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;

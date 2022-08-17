@@ -1,7 +1,6 @@
 package br.com.alura.alurabank.converters;
 
 import br.com.alura.alurabank.controller.view.ExtratoView;
-import br.com.alura.alurabank.dominio.ContaCorrente;
 import br.com.alura.alurabank.dominio.DadosDaConta;
 import br.com.alura.alurabank.dominio.MovimentacaoDeConta;
 import org.springframework.stereotype.Component;

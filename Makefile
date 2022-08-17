@@ -14,3 +14,9 @@ local/down:
 
 local/logs:
 	@ docker-compose logs -f $(service)
+
+lint:
+	@ ./mvnw verify -DskipTests -Djacoco.skip=true
+
+test:
+	@ ./mvnw test

@@ -1,7 +1,5 @@
 package br.com.alura.alurabank;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -13,3 +11,11 @@ public class AluraBankApplication {
 	}
 
 }
+
+/*
+	Linter
+	Testes automatizados (quanto mais melhor)
+	Empacotar a aplicação (*Docker, jar, war, ear)
+	Enviar o pacote/artefato para ser armazenado (registry, artfactories)
+	Efetuar o deploy do artefato
+ */
