@@ -15,6 +15,6 @@ jobs:
       - name: Testing
         run: make test
       - name: Generate Docker Image
-        run: make docker/build tag=${{ env.GITHUB_JOB }}
+        run: make docker/build tag=$GITHUB_JOB
 
 
