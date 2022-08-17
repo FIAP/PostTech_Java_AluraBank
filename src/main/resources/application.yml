@@ -36,7 +36,8 @@ spring:
     activate:
       on-profile: test
   datasource:
-    url: jdbc:postgresql://localhost:5432/alurabanktest
+    url: jdbc:tc:postgresql:13.2:////aluratest
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
   jpa:
     hibernate:
       ddl-auto: create-drop
