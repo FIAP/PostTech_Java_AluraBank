@@ -1,7 +1,5 @@
 package br.com.alura.alurabank.dominio;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +12,7 @@ public class Correntista {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SuppressWarnings("PMD.UnusedPrivateField")
     private Integer id;
 
     private String cpf;

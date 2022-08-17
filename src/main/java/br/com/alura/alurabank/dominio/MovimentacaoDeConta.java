@@ -12,6 +12,7 @@ public class MovimentacaoDeConta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SuppressWarnings("PMD.UnusedPrivateField")
     private Integer id;
 
     private BigDecimal valor;
