@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      HEROKU_API_KEY: ${{secret.HEROKU_API_KEY}}
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -19,7 +19,7 @@ jobs:
         with:
           registry: registry.heroku.com
           username: "_"
-          password: ${{ secret.HEROKU_API_KEY }}
+          password: ${{ secrets.HEROKU_API_KEY }}
 
       - name: Push Image to Heroku Docker Registry
         run: make docker/retag/heroku tag=$GITHUB_JOB
