@@ -5,7 +5,7 @@ docker/build:
 	@ docker image build -t $(DOCKER_IMAGE_NAME):$(tag) .
 
 docker/login/heroku:
-	@ docker login --username=_ --password=$(auth_token) registry.heroku.com
+	@ echo $(auth_token) | docker login --username=_ --password-stdin registry.heroku.com
 
 
 docker/retag/heroku:
