@@ -9,7 +9,7 @@ alura:
 
 spring:
   datasource:
-    url: ${DATABASE_URL:${alura.database.url}}
+    url: ${DATABASE_CONNECTION_URL:${alura.database.url}}
     username: ${DATABASE_USER:${alura.database.user}}
     password: ${DATABASE_PASSWORD:${alura.database.password}}
   jpa:
