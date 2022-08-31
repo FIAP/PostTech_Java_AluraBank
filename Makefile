@@ -4,9 +4,6 @@ HEROKU_APP_NAME=alura-bank
 docker/build:
 	@ docker image build -t $(DOCKER_IMAGE_NAME):$(tag) .
 
-docker/login/heroku:
-	@ echo $(auth_token) | docker login --username=_ --password-stdin registry.heroku.com
-
 
 docker/retag/heroku:
 	@ docker tag $(DOCKER_IMAGE_NAME):$(tag) registry.heroku.com/$(HEROKU_APP_NAME)/web
