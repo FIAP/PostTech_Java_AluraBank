@@ -6,6 +6,8 @@ alura:
   keycloak:
     url: http://localhost:8080/realms/alura
 
+server:
+  port: ${PORT:8080}
 
 spring:
   datasource:
