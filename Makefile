@@ -29,9 +29,11 @@ test:
 
 
 deploy:
-	IMAGE_ID=$(shell docker inspect registry.heroku.com/$(HEROKU_APP_NAME)/web -f "{{.Id}}") \
-		curl -X PATCH https://api.heroku.com/apps/$(HEROKU_APP_NAME)/formation \
+	make _deploy_heroku auth_token=$(auth_token) image_id=$(shell docker inspect registry.heroku.com/$(HEROKU_APP_NAME)/web -f "{{.Id}}")
+
+_deploy_heroku:
+	curl -X PATCH https://api.heroku.com/apps/$(HEROKU_APP_NAME)/formation \
 		-H "Authorization: Bearer $(auth_token)" \
 		-H "Content-Type: application/json" \
 		-H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
-        -d '{ "updates": [{"type": "web","docker_image": "$$IMAGE_ID"}]}'
+        -d '{ "updates": [{"type": "web","docker_image": "$(image_id)"}]}'
