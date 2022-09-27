@@ -18,6 +18,7 @@ import br.com.alura.alurabank.repositorio.ContasCorrenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -31,13 +32,16 @@ public class ContaService {
     private final ContaFactory factory;
     private final DadosDaContaCoverter dadosDaContaConverter;
 
+    private final EmailService emailService;
 
-    public ContaService(ContasCorrenteRepository contasCorrenteRepository, CorrentistaRepository correntistaRepository, MovimentacaoRepository movimentacaoRepository, ContaFactory factory, DadosDaContaCoverter dadosDaContaConverter, ExtratoConverter extratoConverter) {
+
+    public ContaService(ContasCorrenteRepository contasCorrenteRepository, CorrentistaRepository correntistaRepository, MovimentacaoRepository movimentacaoRepository, ContaFactory factory, DadosDaContaCoverter dadosDaContaConverter, EmailService emailService, ExtratoConverter extratoConverter) {
         this.contasCorrenteRepository = contasCorrenteRepository;
         this.correntistaRepository = correntistaRepository;
         this.movimentacaoRepository = movimentacaoRepository;
         this.factory = factory;
         this.dadosDaContaConverter = dadosDaContaConverter;
+        this.emailService = emailService;
         this.extratoConverter = extratoConverter;
     }
 
@@ -72,10 +76,12 @@ public class ContaService {
         contasCorrenteRepository.delete(conta);
     }
 
+    @Transactional
     public void movimentar(MovimentacaoForm form) {
         movimentarConta(form.getDadosDaConta(), form.getValor(), form.getOperacao());
     }
 
+    @Transactional
     public void transferir(TransferenciaForm form) {
         BigDecimal valor = form.getValor();
 
@@ -116,6 +122,18 @@ public class ContaService {
         MovimentacaoDeConta movimentacao = new MovimentacaoDeConta(contaCorrente, valor, operacao);
 
         movimentacaoRepository.save(movimentacao);
+
+        // INFO: Envio de notificação por email
+        var correntista = contaCorrente.getCorrentista();
+
+        var mail = new EmailService.TransactionMail(
+                correntista.getNome(),
+                correntista.getEmail(),
+                movimentacao.getOperacao(),
+                movimentacao.getValor(),
+                movimentacao.getData()
+        );
+        emailService.sendTransactionMail(mail);
 
     }
 }

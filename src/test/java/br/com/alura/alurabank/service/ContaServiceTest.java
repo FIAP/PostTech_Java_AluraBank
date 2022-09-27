@@ -29,7 +29,7 @@ class ContaServiceTest {
     private static final String AGENCIA = "1234";
     private static final String NUMERO = "1234";
     private static final DadosDaConta DADOS_DA_CONTA = new DadosDaConta(BANCO, AGENCIA, NUMERO);
-    private static final Correntista CORRENTISTA = new Correntista("12341234", "Fulano");
+    private static final Correntista CORRENTISTA = new Correntista("12341234", "Fulano", "email@example.com");
     private static final ContaCorrente CONTA_CORRENTE = new ContaCorrente(BANCO, AGENCIA, NUMERO, CORRENTISTA);
 
 
