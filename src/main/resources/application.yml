@@ -33,6 +33,11 @@ spring:
       mail:
         transport:
           protocol: smtp
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 springdoc:
   swagger-ui:

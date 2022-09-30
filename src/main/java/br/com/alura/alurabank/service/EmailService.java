@@ -1,13 +1,11 @@
 package br.com.alura.alurabank.service;
 
-import br.com.alura.alurabank.dominio.Operacao;
+import br.com.alura.alurabank.eventos.TransactionMail;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Service
 public class EmailService {
@@ -15,42 +13,6 @@ public class EmailService {
 
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
-    }
-
-    static class TransactionMail {
-        private String nome;
-        private String email;
-        private Operacao operacao;
-        private BigDecimal valor;
-        private LocalDateTime data;
-
-        TransactionMail(String nome, String email, Operacao operacao, BigDecimal valor, LocalDateTime data) {
-            this.nome = nome;
-            this.email = email;
-            this.operacao = operacao;
-            this.valor = valor;
-            this.data = data;
-        }
-
-        public String getNome() {
-            return nome;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public Operacao getOperacao() {
-            return operacao;
-        }
-
-        public BigDecimal getValor() {
-            return valor;
-        }
-
-        public LocalDateTime getData() {
-            return data;
-        }
     }
 
     public void sendTransactionMail(TransactionMail mail) {

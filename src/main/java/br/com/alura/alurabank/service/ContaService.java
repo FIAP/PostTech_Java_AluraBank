@@ -11,10 +11,12 @@ import br.com.alura.alurabank.controller.view.ExtratoView;
 import br.com.alura.alurabank.converters.DadosDaContaCoverter;
 import br.com.alura.alurabank.converters.ExtratoConverter;
 import br.com.alura.alurabank.dominio.*;
+import br.com.alura.alurabank.eventos.TransactionMail;
 import br.com.alura.alurabank.factories.ContaFactory;
 import br.com.alura.alurabank.repositorio.CorrentistaRepository;
 import br.com.alura.alurabank.repositorio.MovimentacaoRepository;
 import br.com.alura.alurabank.repositorio.ContasCorrenteRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,14 +36,17 @@ public class ContaService {
 
     private final EmailService emailService;
 
+    private final RabbitTemplate rabbitTemplate;
 
-    public ContaService(ContasCorrenteRepository contasCorrenteRepository, CorrentistaRepository correntistaRepository, MovimentacaoRepository movimentacaoRepository, ContaFactory factory, DadosDaContaCoverter dadosDaContaConverter, EmailService emailService, ExtratoConverter extratoConverter) {
+
+    public ContaService(ContasCorrenteRepository contasCorrenteRepository, CorrentistaRepository correntistaRepository, MovimentacaoRepository movimentacaoRepository, ContaFactory factory, DadosDaContaCoverter dadosDaContaConverter, EmailService emailService, RabbitTemplate rabbitTemplate, ExtratoConverter extratoConverter) {
         this.contasCorrenteRepository = contasCorrenteRepository;
         this.correntistaRepository = correntistaRepository;
         this.movimentacaoRepository = movimentacaoRepository;
         this.factory = factory;
         this.dadosDaContaConverter = dadosDaContaConverter;
         this.emailService = emailService;
+        this.rabbitTemplate = rabbitTemplate;
         this.extratoConverter = extratoConverter;
     }
 
@@ -126,14 +131,16 @@ public class ContaService {
         // INFO: Envio de notificação por email
         var correntista = contaCorrente.getCorrentista();
 
-        var mail = new EmailService.TransactionMail(
+        var mail = new TransactionMail(
                 correntista.getNome(),
                 correntista.getEmail(),
                 movimentacao.getOperacao(),
                 movimentacao.getValor(),
                 movimentacao.getData()
         );
-        emailService.sendTransactionMail(mail);
+
+
+        rabbitTemplate.convertAndSend("transacao", "envio-de-emails", mail);
 
     }
 }
