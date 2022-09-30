@@ -20,19 +20,28 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
       - "8180:8080"
-  bank:
-    image: alura/bank
-    environment:
-      DATABASE_URL: jdbc:postgresql://db:5432/alurabank
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: postgres
-      KEYCLOAK_REALM_URL: http://keycloak:8080/realms/alura
-    depends_on:
-      - db
-      - keycloak
+#  bank:
+#    image: alura/bank
+#    environment:
+#      DATABASE_URL: jdbc:postgresql://db:5432/alurabank
+#      DATABASE_USER: postgres
+#      DATABASE_PASSWORD: postgres
+#      KEYCLOAK_REALM_URL: http://keycloak:8080/realms/alura
+#    depends_on:
+#      - db
+#      - keycloak
+#    ports:
+#      - "8080:8080"
+  mailhog:
+    image: mailhog/mailhog
     ports:
-      - "8080:8080"
-
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
 
 
 volumes:

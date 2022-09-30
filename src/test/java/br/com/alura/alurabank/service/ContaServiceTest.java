@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,7 +30,7 @@ class ContaServiceTest {
     private static final String AGENCIA = "1234";
     private static final String NUMERO = "1234";
     private static final DadosDaConta DADOS_DA_CONTA = new DadosDaConta(BANCO, AGENCIA, NUMERO);
-    private static final Correntista CORRENTISTA = new Correntista("12341234", "Fulano");
+    private static final Correntista CORRENTISTA = new Correntista("12341234", "Fulano", "email@example.com");
     private static final ContaCorrente CONTA_CORRENTE = new ContaCorrente(BANCO, AGENCIA, NUMERO, CORRENTISTA);
 
 
@@ -45,6 +46,9 @@ class ContaServiceTest {
     private DadosDaContaCoverter dadosDaContaConverter;
     @Mock
     private ExtratoConverter extratoConverter;
+
+    @Mock
+    private RabbitTemplate template;
 
     @Captor
     private ArgumentCaptor<MovimentacaoDeConta> movimentacaoCaptor;

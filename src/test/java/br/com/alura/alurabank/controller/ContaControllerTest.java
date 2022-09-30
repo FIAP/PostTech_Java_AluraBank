@@ -71,8 +71,9 @@ class ContaControllerTest {
 
         String name = "Fulano";
         String cpf = "62669747035";
+        String email = "email@example.com";
 
-        var payload = new CorrentistaForm(name, cpf);
+        var payload = new CorrentistaForm(name, cpf, email);
 
 
         assertThat(repository.count()).isEqualTo(0);
@@ -124,8 +125,9 @@ class ContaControllerTest {
 
         String name = "Fulano";
         String cpf = "123412340";
+        String email = "email@example.com";
 
-        var payload = new CorrentistaForm(name, cpf);
+        var payload = new CorrentistaForm(name, cpf, email);
         AtomicReference<ValidationErrorView> response = new AtomicReference<>(null);
 
         assertThat(repository.count()).isEqualTo(0);

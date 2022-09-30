@@ -12,7 +12,7 @@ class MovimentacaoDeContaTest {
     private static final String BANCO = "1234";
     private static final String AGENCIA = "1234";
     private static final String NUMERO = "1234";
-    private static final Correntista CORRENTISTA = new Correntista("12341234", "Joao");
+    private static final Correntista CORRENTISTA = new Correntista("12341234", "Joao", "email@example.com");
     private static final ContaCorrente CONTA_CORRENTE = new ContaCorrente(BANCO, AGENCIA, NUMERO, CORRENTISTA);
 
 

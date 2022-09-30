@@ -17,15 +17,20 @@ public class CorrentistaForm {
     @NotBlank(message = "Nome do Correntista é um campo obrigatório e não pode estar em branco")
     private String nome;
 
+    @JsonProperty
+    @NotBlank(message = "Email do correntista é um campo obrigatório")
+    private String email;
+
     CorrentistaForm() {
     }
 
-    public CorrentistaForm(String nome, String cpf) {
+    public CorrentistaForm(String nome, String cpf, String email) {
         this.cpf = cpf;
         this.nome = nome;
+        this.email = email;
     }
 
     public Correntista toCorrentista(){
-        return new Correntista(cpf, nome);
+        return new Correntista(cpf, nome, email);
     }
 }

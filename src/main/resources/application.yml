@@ -4,7 +4,7 @@ alura:
     user: postgres
     password: postgres
   keycloak:
-    url: http://localhost:8080/realms/alura
+    url: http://192.168.5.137:8180/realms/alura
 
 server:
   port: ${PORT:8080}
@@ -24,6 +24,20 @@ spring:
         jwt:
           issuer-uri: ${KEYCLOAK_REALM_URL:${alura.keycloak.url}}
           jwk-set-uri: ${KEYCLOAK_REALM_URL:${alura.keycloak.url}}/protocol/openid-connect/certs
+  mail:
+    host: localhost
+    port: 1025
+    username: ""
+    password: ""
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 springdoc:
   swagger-ui:
