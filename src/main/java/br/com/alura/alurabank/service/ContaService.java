@@ -13,9 +13,9 @@ import br.com.alura.alurabank.converters.ExtratoConverter;
 import br.com.alura.alurabank.dominio.*;
 import br.com.alura.alurabank.eventos.TransactionMail;
 import br.com.alura.alurabank.factories.ContaFactory;
+import br.com.alura.alurabank.repositorio.ContasCorrenteRepository;
 import br.com.alura.alurabank.repositorio.CorrentistaRepository;
 import br.com.alura.alurabank.repositorio.MovimentacaoRepository;
-import br.com.alura.alurabank.repositorio.ContasCorrenteRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,18 +34,15 @@ public class ContaService {
     private final ContaFactory factory;
     private final DadosDaContaCoverter dadosDaContaConverter;
 
-    private final EmailService emailService;
-
     private final RabbitTemplate rabbitTemplate;
 
 
-    public ContaService(ContasCorrenteRepository contasCorrenteRepository, CorrentistaRepository correntistaRepository, MovimentacaoRepository movimentacaoRepository, ContaFactory factory, DadosDaContaCoverter dadosDaContaConverter, EmailService emailService, RabbitTemplate rabbitTemplate, ExtratoConverter extratoConverter) {
+    public ContaService(ContasCorrenteRepository contasCorrenteRepository, CorrentistaRepository correntistaRepository, MovimentacaoRepository movimentacaoRepository, ContaFactory factory, DadosDaContaCoverter dadosDaContaConverter,  RabbitTemplate rabbitTemplate, ExtratoConverter extratoConverter) {
         this.contasCorrenteRepository = contasCorrenteRepository;
         this.correntistaRepository = correntistaRepository;
         this.movimentacaoRepository = movimentacaoRepository;
         this.factory = factory;
         this.dadosDaContaConverter = dadosDaContaConverter;
-        this.emailService = emailService;
         this.rabbitTemplate = rabbitTemplate;
         this.extratoConverter = extratoConverter;
     }
