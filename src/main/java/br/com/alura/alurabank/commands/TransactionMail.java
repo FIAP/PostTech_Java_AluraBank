@@ -1,4 +1,4 @@
-package br.com.alura.alurabank.eventos;
+package br.com.alura.alurabank.commands;
 
 import br.com.alura.alurabank.dominio.Operacao;
 

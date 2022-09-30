@@ -1,6 +1,6 @@
 package br.com.alura.alurabank.service;
 
-import br.com.alura.alurabank.eventos.TransactionMail;
+import br.com.alura.alurabank.commands.TransactionMail;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;

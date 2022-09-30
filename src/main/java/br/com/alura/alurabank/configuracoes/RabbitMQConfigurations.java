@@ -18,10 +18,23 @@ public class RabbitMQConfigurations {
                 .build();
     }
 
+
+    @Bean
+    public Queue filaDeCriacaoDeUsuario() {
+        return QueueBuilder
+                .durable("create-user")
+                .build();
+    }
+
     // Exchange
     @Bean
     public DirectExchange exchangeTransacao() {
         return new DirectExchange("transacao");
+    }
+
+    @Bean
+    public DirectExchange exchangeCriacaoDeUsuario() {
+        return new DirectExchange("create-user");
     }
 
 
@@ -31,4 +44,13 @@ public class RabbitMQConfigurations {
         return BindingBuilder.bind(filaDeEmail())
                 .to(exchangeTransacao()).withQueueName();
     }
+
+    @Bean
+    public Binding bindingCriacaoDeUsuario() {
+        return BindingBuilder.bind(filaDeCriacaoDeUsuario())
+                .to(exchangeCriacaoDeUsuario()).withQueueName();
+    }
+
+
+
 }

@@ -11,11 +11,3 @@ public class AluraBankApplication {
 	}
 
 }
-
-/*
-	Linter
-	Testes automatizados (quanto mais melhor)
-	Empacotar a aplicação (*Docker, jar, war, ear)
-	Enviar o pacote/artefato para ser armazenado (registry, artfactories)
-	Efetuar o deploy do artefato
- */

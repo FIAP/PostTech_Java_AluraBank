@@ -11,7 +11,7 @@ import br.com.alura.alurabank.controller.view.ExtratoView;
 import br.com.alura.alurabank.converters.DadosDaContaCoverter;
 import br.com.alura.alurabank.converters.ExtratoConverter;
 import br.com.alura.alurabank.dominio.*;
-import br.com.alura.alurabank.eventos.TransactionMail;
+import br.com.alura.alurabank.commands.TransactionMail;
 import br.com.alura.alurabank.factories.ContaFactory;
 import br.com.alura.alurabank.repositorio.ContasCorrenteRepository;
 import br.com.alura.alurabank.repositorio.CorrentistaRepository;
