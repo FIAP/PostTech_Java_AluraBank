@@ -8,15 +8,10 @@ import br.com.alura.alurabank.infra.http.clients.KeycloakUpdatePasswordForm;
 import br.com.alura.alurabank.repositorio.CorrentistaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriTemplate;
-
-import java.net.URI;
-import java.util.Map;
 
 @Component
 public class CriaUsuarioConsumer {
