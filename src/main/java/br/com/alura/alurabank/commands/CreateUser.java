@@ -27,4 +27,12 @@ public class CreateUser implements Serializable {
     public String getPassword() {
         return password;
     }
+
+    @Override
+    public String toString() {
+        return "CreateUser{" +
+                "correntistaId=" + correntistaId +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

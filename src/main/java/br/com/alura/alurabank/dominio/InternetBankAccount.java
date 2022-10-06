@@ -17,4 +17,12 @@ public class InternetBankAccount {
     public String getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "InternetBankAccount{" +
+                "email='" + email + '\'' +
+                ", id='" + id + '\'' +
+                '}';
+    }
 }

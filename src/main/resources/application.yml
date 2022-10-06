@@ -24,7 +24,7 @@ spring:
         registration:
           keycloak:
             client-id: user-manager
-            client-secret: MdousvfdxoemjCRvlqC4gh41r7qTgCp6
+            client-secret: RTe74iiDIxw9aemgIYPOryviVgBM6tPW
             authorization-grant-type: client_credentials
         provider:
           keycloak:
@@ -47,6 +47,9 @@ spring:
     port: 5672
     username: guest
     password: guest
+    listener:
+      simple:
+        default-requeue-rejected: false
 
 springdoc:
   swagger-ui:
@@ -59,6 +62,7 @@ keycloak:
   user:
     api:
       url: http://localhost:8180/admin/realms/alura
+      created-user-uri-template: "${keycloak.user.api.url}/users/{id}"
 
 
 

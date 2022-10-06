@@ -3,6 +3,7 @@ package br.com.alura.alurabank.infra.http.clients;
 import br.com.alura.alurabank.configuracoes.keycloak.oauth.KeycloakAuthInterceptor;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,5 +15,5 @@ public interface KeycloakClient {
     ResponseEntity<?> createUser(@RequestBody KeycloakCreateUserForm form);
 
     @PutMapping("/users/{id}/reset-password")
-    ResponseEntity<?> updatePassword(@RequestBody KeycloakUpdatePasswordForm form);
+    ResponseEntity<?> updatePassword(@PathVariable String id, @RequestBody KeycloakUpdatePasswordForm form);
 }

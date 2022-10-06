@@ -64,4 +64,8 @@ public class Correntista {
     public Integer getId() {
         return id;
     }
+
+    public boolean hasInternetBank() {
+        return externalId != null && !externalId.isEmpty();
+    }
 }

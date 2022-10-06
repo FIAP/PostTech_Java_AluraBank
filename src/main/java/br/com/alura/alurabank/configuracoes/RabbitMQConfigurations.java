@@ -7,6 +7,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 
 @EnableRabbit
@@ -33,11 +34,19 @@ public class RabbitMQConfigurations {
                 .build();
     }
 
-
     @Bean
     public Queue filaDeCriacaoDeUsuario() {
         return QueueBuilder
                 .durable("create-user")
+                .withArgument("x-dead-letter-exchange", "")
+                .withArgument("x-dead-letter-routing-key", "create-user-dlq")
+                .build();
+    }
+
+    @Bean
+    public Queue filaDLQDeCriacaoDeUsuario() {
+        return QueueBuilder
+                .durable("create-user-dlq")
                 .build();
     }
 
