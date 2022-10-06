@@ -10,4 +10,6 @@ public interface CorrentistaRepository extends Repository<Correntista, Integer> 
     void save(Correntista correntista);
 
     Optional<Correntista> findByExternalId(String externalId);
+
+    Optional<Correntista> findById(Integer correntistaId);
 }

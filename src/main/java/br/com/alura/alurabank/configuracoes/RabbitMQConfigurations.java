@@ -2,6 +2,9 @@ package br.com.alura.alurabank.configuracoes;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,6 +12,18 @@ import org.springframework.context.annotation.Configuration;
 @EnableRabbit
 @Configuration
 public class RabbitMQConfigurations {
+    @Bean
+    public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
+        final var rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(producerJackson2MessageConverter());
+        return rabbitTemplate;
+    }
+
+    @Bean
+    public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
 
     // Queue
     @Bean
@@ -18,10 +33,31 @@ public class RabbitMQConfigurations {
                 .build();
     }
 
+    @Bean
+    public Queue filaDeCriacaoDeUsuario() {
+        return QueueBuilder
+                .durable("create-user")
+                .withArgument("x-dead-letter-exchange", "")
+                .withArgument("x-dead-letter-routing-key", "create-user-dlq")
+                .build();
+    }
+
+    @Bean
+    public Queue filaDLQDeCriacaoDeUsuario() {
+        return QueueBuilder
+                .durable("create-user-dlq")
+                .build();
+    }
+
     // Exchange
     @Bean
     public DirectExchange exchangeTransacao() {
         return new DirectExchange("transacao");
+    }
+
+    @Bean
+    public DirectExchange exchangeCriacaoDeUsuario() {
+        return new DirectExchange("create-user");
     }
 
 
@@ -31,4 +67,11 @@ public class RabbitMQConfigurations {
         return BindingBuilder.bind(filaDeEmail())
                 .to(exchangeTransacao()).withQueueName();
     }
+
+    @Bean
+    public Binding bindingCriacaoDeUsuario() {
+        return BindingBuilder.bind(filaDeCriacaoDeUsuario())
+                .to(exchangeCriacaoDeUsuario()).withQueueName();
+    }
+
 }

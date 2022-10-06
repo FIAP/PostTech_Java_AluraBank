@@ -1,6 +1,6 @@
 package br.com.alura.alurabank.consumers;
 
-import br.com.alura.alurabank.eventos.TransactionMail;
+import br.com.alura.alurabank.commands.TransactionMail;
 import br.com.alura.alurabank.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

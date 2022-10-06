@@ -20,6 +20,15 @@ spring:
     show-sql: true
   security:
     oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: user-manager
+            client-secret: RTe74iiDIxw9aemgIYPOryviVgBM6tPW
+            authorization-grant-type: client_credentials
+        provider:
+          keycloak:
+            token-uri: http://localhost:8180/realms/alura/protocol/openid-connect/token
       resourceserver:
         jwt:
           issuer-uri: ${KEYCLOAK_REALM_URL:${alura.keycloak.url}}
@@ -38,6 +47,9 @@ spring:
     port: 5672
     username: guest
     password: guest
+    listener:
+      simple:
+        default-requeue-rejected: false
 
 springdoc:
   swagger-ui:
@@ -45,6 +57,15 @@ springdoc:
       client-id: app
       scopes: openid
       use-pkce-with-authorization-code-grant: true
+
+keycloak:
+  user:
+    api:
+      url: http://localhost:8180/admin/realms/alura
+      created-user-uri-template: "${keycloak.user.api.url}/users/{id}"
+
+
+
 
 ---
 spring:

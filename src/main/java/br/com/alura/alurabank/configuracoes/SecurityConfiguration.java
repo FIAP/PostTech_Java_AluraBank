@@ -15,6 +15,7 @@ public class SecurityConfiguration {
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/v3/api-docs/**").permitAll()
+                .antMatchers("/internet-bank").hasAuthority("SCOPE_account-management")
                 .antMatchers("/contas/extrato").hasAuthority("SCOPE_read-balance")
                 .anyRequest().authenticated()
                 .and().oauth2ResourceServer().jwt();

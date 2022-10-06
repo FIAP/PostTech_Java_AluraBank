@@ -55,4 +55,17 @@ public class Correntista {
     public String getEmail() {
         return email;
     }
+
+    public void setInternetBankAccount(InternetBankAccount account) {
+        this.email = account.getEmail();
+        this.externalId = account.getId();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public boolean hasInternetBank() {
+        return externalId != null && !externalId.isEmpty();
+    }
 }
