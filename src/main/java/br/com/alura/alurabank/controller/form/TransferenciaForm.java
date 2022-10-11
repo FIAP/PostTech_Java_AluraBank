@@ -18,6 +18,15 @@ public class TransferenciaForm {
     @NotNull
     private BigDecimal valor;
 
+    TransferenciaForm() {
+    }
+
+    public TransferenciaForm(DadosDaConta dadosDeOrigem, DadosDaConta dadosDeDestino, BigDecimal valor) {
+        this.dadosDeOrigem = dadosDeOrigem;
+        this.dadosDeDestino = dadosDeDestino;
+        this.valor = valor;
+    }
+
     public DadosDaConta getDadosDeOrigem() {
         return dadosDeOrigem;
     }
